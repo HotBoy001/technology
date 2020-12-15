@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.technologygarden.dao.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.technologygarden.entity.Role">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="role" jdbcType="INTEGER" property="role" />
+    <result column="infoid" jdbcType="INTEGER" property="infoid" />
+    <result column="phone" jdbcType="CHAR" property="phone" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteBycId" parameterType="java.lang.Integer">
+    delete from role
+    where infoid = #{cId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.technologygarden.entity.Role">
+    insert into role (account, password,
+      role, infoid, phone)
+    values (#{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{role,jdbcType=INTEGER}, #{infoid,jdbcType=INTEGER}, #{phone,jdbcType=CHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.technologygarden.entity.Role">
+    update role
+    set account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role = #{role,jdbcType=INTEGER},
+      infoid = #{infoid,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from role
+  </select>
+  <select id="selectBycId" resultMap="BaseResultMap">
+    select *
+    from role
+    where infoid = #{cId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByAccount" resultMap="BaseResultMap">
+    select *
+    from role
+    where role.account = #{account,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select *
+    from role
+    where role.phone = #{account,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateDynamic" parameterType="com.technologygarden.entity.Role">
+    update role
+    <set>
+      <if test="account != null and account != ''">
+        role.account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null and password != ''">
+        role.password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        role.role = #{role,jdbcType=INTEGER},
+      </if>
+      <if test="infoid != null">
+        role.infoid = #{infoid,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null and phone != ''">
+        role.phone = #{phone,jdbcType=CHAR},
+      </if>
+    </set>
+    where role.id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectAllAdminWithoutPassword" resultMap="BaseResultMap">
+    select r.id, r.account, r.role, r.infoid
+    from role r
+    where r.role = 1
+  </select>
+
+  <select id="countCompanyNum" resultType="java.lang.Integer">
+    select
+    count(*)
+    from role
+    where role.role = 2
+  </select>
+</mapper>

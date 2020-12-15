@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.technologygarden.dao.PropertyDeviceMapper">
+  <resultMap id="BaseResultMap" type="com.technologygarden.entity.PropertyDevice">
+    <id column="id" jdbcType="INTEGER" property="propertyDeviceId" />
+    <result column="kind" jdbcType="INTEGER" property="kind" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="property" jdbcType="VARCHAR" property="property" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from property_device
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.technologygarden.entity.PropertyDevice">
+    insert into property_device (id, kind, category_id, 
+      name, property, remark)
+    values (#{propertyDeviceId,jdbcType=INTEGER}, #{kind,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER},
+      #{propertyDeviceId,jdbcType=INTEGER}, #{property,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.technologygarden.entity.PropertyDevice">
+    update property_device
+    set kind = #{kind,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      name = #{propertyDeviceId,jdbcType=INTEGER},
+      property = #{property,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{propertyDeviceId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from property_device
+    where id = #{propertyDeviceId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select *
+    from property_device
+  </select>
+
+  <select id="selectSystemPropertyDeviceListByPage" resultMap="BaseResultMap">
+    select *
+    from property_device
+    <if test="categoryId == null">
+      where property_device.category_id != 0
+    </if>
+    <if test="categoryId != null">
+      where property_device.category_id = 0
+    </if>
+  </select>
+
+  <insert id="insertSystemPropertyDeviceDynamic" parameterType="com.technologygarden.entity.PropertyDevice">
+    insert into property_device
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="kind != null">
+        kind,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="categoryName != null and categoryName != ''">
+        name,
+      </if>
+      <if test="property != null and property != ''">
+        property,
+      </if>
+      <if test="remark != null and remark != ''">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values(" suffix=")" suffixOverrides=",">
+      <if test="kind != null">
+        #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null and categoryName != ''">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null and property != ''">
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark != ''">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <delete id="deleteSystemPropertyDeviceByCategoryId" parameterType="java.lang.Integer">
+    delete from property_device
+    where property_device.category_id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <update id="updateSystemPropertyDeviceByIdDynamic" parameterType="com.technologygarden.entity.PropertyDevice">
+    update property_device
+    <set>
+      <if test="kind != null">
+        property_device.kind = #{kind,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        property_device.category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null and categoryName != ''">
+        property_device.name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null and property != ''">
+        property_device.property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null and remark != ''">
+        property_device.remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where property_device.id = #{propertyDeviceId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateSystemPropertyDeviceByCategoryId" parameterType="com.technologygarden.entity.PropertyDevice">
+    update property_device
+    set property_device.name = #{propertyDeviceId,jdbcType=INTEGER}
+    where property_device.category_id = #{propertyDeviceId,jdbcType=INTEGER}
+  </update>
+
+  <select id="searchSystemPropertyDeviceByPage" resultMap="BaseResultMap">
+    select *
+    from property_device
+    <where>
+      and property_device.category_id != 0
+      <if test="categoryId != null">
+        and property_device.category_id = #{categoryId,jdbcType=INTEGER}
+      </if>
+      <if test="categoryName != null and categoryName != ''">
+        and property_device.name like concat('%', #{categoryName,jdbcType=VARCHAR}, '%')
+      </if>
+      <if test="propertyName != null and propertyName != ''">
+        and property_device.property like concat('%', #{propertyName,jdbcType=VARCHAR}, '%')
+      </if>
+    </where>
+  </select>
+
+  <select id="selectCateGoryByKind" resultMap="BaseResultMap">
+    select *
+    from property_device
+    where property_device.kind = #{kind,jdbcType=INTEGER} and property_device.category_id = 0
+  </select>
+
+  <select id="selectPropertyByCategoryId" resultMap="BaseResultMap">
+    select *
+    from property_device
+    where property_device.category_id = #{categoryId,jdbcType=INTEGER} and property_device.category_id != 0
+  </select>
+
+  <select id="selectPropertyDeviceWithDevice" resultMap="PropertyDeviceWithDevice">
+    SELECT
+      d.id AS d_id,
+      d.category_id AS d_category_id,
+      d.NAME AS d_name,
+      d.total AS d_total,
+      d.piece AS d_piece,
+      d.remain AS d_remain,
+      d.OWNER AS d_owner,
+      d.kind AS d_kind,
+      pd.id AS pd_id,
+      pd.kind AS pd_kind,
+      pd.category_id AS pd_category_id,
+      pd.NAME AS pd_name,
+      pd.property AS pd_property,
+      pd.remark AS pd_remark
+    FROM
+      `property_device` pd,
+      device d
+    WHERE
+      pd.category_id = 0
+      AND pd.id = d.category_id
+  </select>
+  <resultMap id="PropertyDeviceWithDevice" type="com.technologygarden.entity.PropertyDevice">
+    <id column="pd_id" jdbcType="INTEGER" property="propertyDeviceId" />
+    <result column="pd_kind" jdbcType="INTEGER" property="kind" />
+    <result column="pd_category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="pd_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="pd_property" jdbcType="VARCHAR" property="property" />
+    <result column="pd_remark" jdbcType="VARCHAR" property="remark" />
+    <collection property="deviceList" ofType="com.technologygarden.entity.Device">
+      <id column="d_id" jdbcType="INTEGER" property="deviceId"/>
+      <result column="d_category_id" jdbcType="INTEGER" property="categoryId"/>
+      <result column="d_name" jdbcType="VARCHAR" property="deviceName"/>
+      <result column="d_total" jdbcType="INTEGER" property="total"/>
+      <result column="d_remain" jdbcType="INTEGER" property="remain"/>
+      <result column="d_piece" jdbcType="FLOAT" property="piece"/>
+      <result column="d_owner" jdbcType="INTEGER" property="owner"/>
+      <result column="d_kind" jdbcType="INTEGER" property="kind"/>
+    </collection>
+  </resultMap>
+
+  <select id="selectDeviceCategoryById" resultMap="BaseResultMap">
+    select *
+    from property_device
+    <where>
+      and property_device.category_id = 0
+      <if test="propertyDeviceId != null">
+        and property_device.id = #{propertyDeviceId,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectFatherSystemPropertyDeviceByKind" resultMap="BaseResultMap">
+    select *
+    from property_device
+    <where>
+      and property_device.category_id = 0
+      <if test="kind != null">
+        and property_device.kind = #{kind,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+
+  <select id="searchFatherSystemPropertyDeviceByPage" resultMap="BaseResultMap">
+    select *
+    from property_device
+    <where>
+      and property_device.category_id = 0
+      <if test="categoryName != null and categoryName != ''">
+        and property_device.name like concat('%', #{categoryName,jdbcType=VARCHAR}, '%')
+      </if>
+    </where>
+  </select>
+
+</mapper>

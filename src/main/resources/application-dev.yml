@@ -1,0 +1,50 @@
+server:
+  port: 8888
+
+# 数据库连接（测试）
+spring:
+  datasource:
+    url: jdbc:mysql://139.9.XX.XXX:3306/technology?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: XXXXXX
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    # Hikari连接池配置
+    hikari:
+      # 最小连接
+      minimum-idle: 5
+      # 最大连接
+      maximum-pool-size: 30
+      #自动提交
+      auto-commit: true
+      #最大空闲时常
+      idle-timeout: 30000
+      #最大生命周期
+      max-lifetime: 1800000
+      #连接超时时间
+      connection-timeout: 30000
+      #心跳检测
+      connection-test-query: select 1
+
+  # 取消tomcat限制的请求文件大小，由前端做限制
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: -1
+      max-request-size: -1
+
+
+pagehelper:
+  helper-dialect: mysql
+
+# 打印sql
+logging:
+  level:
+    com.technologygarden.dao: debug
+  config: classpath:logback-spring-dev.xml
+
+
+file:
+  storagePath: D:/uploadFile/
+  url: http://localhost:8888/image/
+

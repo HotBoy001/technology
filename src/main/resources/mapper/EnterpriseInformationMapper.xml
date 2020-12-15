@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.technologygarden.dao.EnterpriseInformationMapper">
+  <resultMap id="BaseResultMap" type="com.technologygarden.entity.EnterpriseInformation">
+    <id column="c_Id" jdbcType="INTEGER" property="cId" />
+    <result column="c_name" jdbcType="VARCHAR" property="cName" />
+    <result column="c_category" jdbcType="VARCHAR" property="cCategory" />
+    <result column="c_legalPerson" jdbcType="INTEGER" property="cLegalperson" />
+    <result column="c_code" jdbcType="CHAR" property="cCode" />
+    <result column="c_date" jdbcType="DATE" property="cDate" />
+    <result column="taxpayer_Type" jdbcType="VARCHAR" property="taxpayerType" />
+    <result column="c_fund" jdbcType="DOUBLE" property="cFund" />
+    <result column="c_product" jdbcType="VARCHAR" property="cProduct" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="c_employee" jdbcType="INTEGER" property="cEmployee" />
+    <result column="c_information" jdbcType="VARCHAR" property="cInformation" />
+    <result column="c_status" jdbcType="INTEGER" property="cStatus" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="file_product" jdbcType="VARCHAR" property="fileProduct" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from enterprise_information
+    where c_Id = #{cId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.technologygarden.entity.EnterpriseInformation">
+    insert into enterprise_information (c_Id, c_name, c_category,
+      c_legalPerson, c_code, c_date,
+      taxpayer_Type, c_fund, c_product,
+      file_name, c_employee, c_information,
+      c_status,comment,file_product)
+    values (#{cId,jdbcType=INTEGER}, #{cName,jdbcType=VARCHAR}, #{cCategory,jdbcType=VARCHAR},
+      #{cLegalperson,jdbcType=INTEGER}, #{cCode,jdbcType=CHAR}, #{cDate,jdbcType=DATE},
+      #{taxpayerType,jdbcType=VARCHAR}, #{cFund,jdbcType=DOUBLE}, #{cProduct,jdbcType=VARCHAR},
+      #{fileName,jdbcType=VARCHAR}, #{cEmployee,jdbcType=INTEGER}, #{cInformation,jdbcType=VARCHAR},
+      #{cStatus,jdbcType=INTEGER},#{comment,jdbcType=VARCHAR},#{fileProduct,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.technologygarden.entity.EnterpriseInformation">
+    update enterprise_information
+    set c_name = #{cName,jdbcType=VARCHAR},
+      c_category = #{cCategory,jdbcType=VARCHAR},
+      c_legalPerson = #{cLegalperson,jdbcType=INTEGER},
+      c_code = #{cCode,jdbcType=CHAR},
+      c_date = #{cDate,jdbcType=DATE},
+      taxpayer_Type = #{taxpayerType,jdbcType=VARCHAR},
+      c_fund = #{cFund,jdbcType=DOUBLE},
+      c_product = #{cProduct,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      c_employee = #{cEmployee,jdbcType=INTEGER},
+      c_information = #{cInformation,jdbcType=VARCHAR},
+      c_status = #{cStatus,jdbcType=INTEGER},
+      comment = #{comment,jdbcType=VARCHAR}
+    where c_Id = #{cId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByFileProduct" parameterType="com.technologygarden.entity.EnterpriseInformation">
+    update enterprise_information
+    set file_product=#{fileProduct,jdbcType=VARCHAR}
+    where c_Id = #{cId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select c_Id, c_name, c_category, c_legalPerson, c_code, c_date, taxpayer_Type, c_fund, 
+    c_product, file_name, c_employee, c_information, c_status, comment,file_product
+    from enterprise_information
+    where c_Id = #{cId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select c_Id, c_name, c_category, c_legalPerson, c_code, c_date, taxpayer_Type, c_fund, 
+    c_product, file_name, c_employee, c_information, c_status, comment,file_product
+    from enterprise_information
+  </select>
+  <select id="selectAllByPageWithoutCommittee" resultMap="BaseResultMap">
+    select c_Id, c_name, c_category, c_legalPerson, c_code, c_date, taxpayer_Type, c_fund,
+    c_product, file_name, c_employee, c_information, c_status, comment,file_product
+    from enterprise_information
+    where c_Id > 0
+  </select>
+  <select id="getEnterpriseStatistics" resultMap="BaseResultMap">
+    select c_Id, c_name, c_category, c_legalPerson, c_code, c_date, taxpayer_Type, c_fund,
+    c_product, file_name, c_employee, c_information, c_status, comment,file_product
+    from enterprise_information
+    where c_status = 2
+  </select>
+  <select id="searchEnterpriseStatistics" resultMap="BaseResultMap">
+    select c_Id, c_name, c_category, c_legalPerson, c_code, c_date, taxpayer_Type, c_fund,
+    c_product, file_name, c_employee, c_information, c_status, comment,file_product
+    from enterprise_information
+    where c_status = 2 and c_name like concat('%', #{search,jdbcType=VARCHAR}, '%')
+  </select>
+
+  <insert id="insertReturnPrimaryKey" parameterType="com.technologygarden.entity.EnterpriseInformation">
+    insert into enterprise_information (c_Id, c_name, c_category,
+    c_legalPerson, c_code, c_date,
+    taxpayer_Type, c_fund, c_product,
+    file_name, c_employee, c_information,
+    c_status,comment,file_product)
+    values (#{cId,jdbcType=INTEGER}, #{cName,jdbcType=VARCHAR}, #{cCategory,jdbcType=VARCHAR},
+    #{cLegalperson,jdbcType=INTEGER}, #{cCode,jdbcType=CHAR}, #{cDate,jdbcType=DATE},
+    #{taxpayerType,jdbcType=VARCHAR}, #{cFund,jdbcType=DOUBLE}, #{cProduct,jdbcType=VARCHAR},
+    #{fileName,jdbcType=VARCHAR}, #{cEmployee,jdbcType=INTEGER}, #{cInformation,jdbcType=VARCHAR},
+    #{cStatus,jdbcType=INTEGER},#{comment,jdbcType=VARCHAR},#{fileProduct,jdbcType=VARCHAR})
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="cId">
+      SELECT LAST_INSERT_ID();
+    </selectKey>
+  </insert>
+
+  <select id="selectAllWithoutCommittee" resultMap="BaseResultMap">
+    select *
+    from enterprise_information
+    where c_Id > 0
+  </select>
+
+  <select id="getNoApprovalCompanyNum" resultType="integer">
+    SELECT
+	count( * )
+    FROM
+	enterprise_information
+    WHERE
+	c_status = 1
+  </select>
+
+</mapper>

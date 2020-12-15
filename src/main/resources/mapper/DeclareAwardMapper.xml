@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.technologygarden.dao.DeclareAwardMapper">
+  <resultMap id="BaseResultMap" type="com.technologygarden.entity.DeclareAward">
+    <id column="d_Id" jdbcType="INTEGER" property="dId" />
+    <result column="d_name" jdbcType="VARCHAR" property="dName" />
+    <result column="a_id" jdbcType="INTEGER" property="aId" />
+    <result column="filename" jdbcType="VARCHAR" property="filename" />
+    <result column="d_status" jdbcType="INTEGER" property="dStatus" />
+    <result column="c_Id" jdbcType="INTEGER" property="cId" />
+    <result column="datetime" jdbcType="TIMESTAMP" property="datetime" />
+    <result column="d_grade" jdbcType="VARCHAR" property="dGrade" />
+    <result column="d_rank" jdbcType="VARCHAR" property="dRank" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from declare_award
+    where d_Id = #{dId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteDeclareAwardBycId" parameterType="java.lang.Integer">
+    delete from declare_award
+    where c_Id = #{cId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.technologygarden.entity.DeclareAward">
+    insert into declare_award (d_Id, d_name, a_id,
+      filename, d_status, c_Id,datetime,d_grade,d_rank
+      )
+    values (#{dId,jdbcType=INTEGER}, #{dName,jdbcType=VARCHAR}, #{aId,jdbcType=INTEGER}, 
+      #{filename,jdbcType=VARCHAR}, #{dStatus,jdbcType=INTEGER}, #{cId,jdbcType=INTEGER},
+      #{datetime,jdbcType=TIMESTAMP},#{dGrade,jdbcType=VARCHAR},#{dRank,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.technologygarden.entity.DeclareAward">
+    update declare_award
+    set d_name = #{dName,jdbcType=VARCHAR},
+      a_id = #{aId,jdbcType=INTEGER},
+      filename = #{filename,jdbcType=VARCHAR},
+      d_status = #{dStatus,jdbcType=INTEGER},
+      c_Id = #{cId,jdbcType=INTEGER},
+      datetime = #{datetime,jdbcType=TIMESTAMP},
+      d_grade = #{dGrade,jdbcType=VARCHAR},
+      d_rank = #{dRank,jdbcType=VARCHAR}
+    where d_Id = #{dId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+    where d_Id = #{dId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+  </select>
+  <select id="getDeclareAwardAllByPage" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+  </select>
+  <select id="getDeclareAwardByPage" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+    where c_Id=#{cId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByaId" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+    where a_id=#{aId,jdbcType=INTEGER}
+  </select>
+  <select id="searchDeclareAward" resultMap="BaseResultMap">
+    select d_Id, d_name, a_id, filename, d_status, c_Id, datetime, d_grade, d_rank
+    from declare_award
+    where where c_Id=#{cId,jdbcType=INTEGER} d_name like concat('%', #{search,jdbcType=VARCHAR}, '%')
+  </select>
+</mapper>
